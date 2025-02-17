@@ -1,50 +1,98 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-   
     <meta charset="UTF-8">
     <title>PATH OF TALENT</title>
-    <link rel="stylesheet" href="rate.css">
-    <link rel="icon" href="TEAM PNG 2.png">
-    
-   
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fad0c4, #ffdde1);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.5s ease-in;
+        }
+        
+        .login-container, .id-card {
+            max-width: 420px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease;
+            background: white;
+        }
+        
+        .login-container:hover, .id-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .gradient-header {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            color: white;
+            padding: 15px;
+            border-top-left-radius: 20px;
+            border-top-right-radius: 20px;
+            text-align: center;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #ff758c, #ff7eb3);
+            border: none;
+            font-size: 18px;
+        }
+        
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #ff5f6d, #ff7eb3);
+        }
+        
+        .stats-badge {
+            background: linear-gradient(45deg, #ff758c, #ff7eb3);
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        
+        .student-img {
+            width: 120px;
+            height: 120px;
+            border: 3px solid white;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+    </style>
 </head>
 <body>
-
-   
-
-   
-   
-
-   
-    <div class="container-box">
-        <h3 class="fares">Student Login</h3>
-        
-        <input type="text" id="username" placeholder="Username">
-        <input type="password" id="password" placeholder="Password">
-        <button class="btn-custom" onclick="login()" >Login</button>
+    <div class="container login-container p-4 text-center">
+        <div class="gradient-header">Student Portal</div>
+        <img src="TEAM PNG 2.png" alt="Logo" width="100" class="my-3">
+        <input type="text" id="username" class="form-control form-control-lg mb-3" placeholder="Username">
+        <input type="password" id="password" class="form-control form-control-lg mb-3" placeholder="Password">
+        <button class="btn btn-primary w-100 py-2 fw-bold" onclick="login()">Sign In →</button>
+    </div>
+    
+    <div id="student-info" class="container id-card p-4 text-center d-none">
+        <div class="gradient-header">STUDENT IDENTITY</div>
+        <img id="student-img" class="student-img rounded-circle mt-3" alt="Student Image">
+        <h4 id="student-name" class="fw-bold mt-3"></h4>
+        <div class="text-muted">Student ID: <span id="student-id" class="fw-bold"></span></div>
+        <div class="d-flex justify-content-center gap-3 mt-3">
+            <div class="stats-badge">★ Bonus: <span id="student-bonus"></span></div>
+            <div class="stats-badge">▼ Minus: <span id="student-minus"></span></div>
+        </div>
+        <div class="text-center pt-3">
+            <img src="TEAM 2.png" alt="Logo" width="100">
+            <div class="text-muted small mt-2">Secure Student Verification System</div>
+        </div>
     </div>
 
-    <div id="student-info" class="id-card">
-        <h3>STUDENT ID CARD</h3>
-        <div>
-        <img id="student-img" src="fares.jpg" alt="Student Image">
-        </div>
-        <h4 id="student-name"></h4>
-        
-        <p><strong>ID:</strong> <span id="student-id"></span></p>
-        <p><strong>Bonus:</strong> <span id="student-bonus"></span></p>
-        <p><strong>Minus:</strong> <span id="student-minus"></span></p>
-        <div>
-            <img src="TEAM 2.png" alt="">
-        </div>
-        <p class="footer-text">Thanks for your time</p>
-    </div>
-
-   
-
-<script>
-const students = {
+    <script>
+    const students = {
     "abdullah.as@pot": { id: "2420753", name: "Abdullah Samir", bonus: 6, minus: 0, img: "abd.jpg" },
     "hanin.ab@pot": { id: "2420394", name: "Hanin Abdelkarim", bonus: 6, minus: 0, img: "haneeb.jpg" },
     "soma.fa@pot": { id: "2420563", name: "Soma Fahmy", bonus: 4, minus: 0, img: "soma.jpg" },
@@ -75,25 +123,30 @@ const students = {
     "omar.ta@pot": { id: "2420821", name: "Omar Tamer", bonus: 2, minus: 0, img: "omar tamer.jpg" },
     "rahma.ah@pot": { id: "2420431", name: "Rahma Ahmed", bonus: 4, minus: 0, img: "rahma.jpg" },
     "rawy.mo@pot": { id: "2420427", name: "Rawy Mohamed", bonus: 2, minus: 0, img: "rawy.jpg" }
-};
+    };
+        function login() {
+            const username = document.getElementById("username").value.toLowerCase().trim();
+            const password = document.getElementById("password").value.trim();
+            const loginContainer = document.querySelector(".login-container");
+            const studentInfo = document.getElementById("student-info");
 
-function login() {
-    const username = document.getElementById("username").value.toLowerCase().trim();
-    const password = document.getElementById("password").value.trim();
+            document.getElementById("username").classList.remove("is-invalid");
+            document.getElementById("password").classList.remove("is-invalid");
 
-    if (students[username] && students[username].id === password) {
-        document.querySelector(".container-box").style.display = "none";
-        document.getElementById("student-info").style.display = "block";
-        document.getElementById("student-name").innerText = students[username].name;
-        document.getElementById("student-id").innerText = students[username].id;
-        document.getElementById("student-bonus").innerText = students[username].bonus;
-        document.getElementById("student-minus").innerText = students[username].minus;
-        document.getElementById("student-img").src = students[username].img;
-    } else {
-        alert("Invalid Username or Password!");
-    }
-}
-</script>
-
+            if (students[username] && students[username].id === password) {
+                loginContainer.classList.add("d-none");
+                studentInfo.classList.remove("d-none");
+                document.getElementById("student-name").textContent = students[username].name;
+                document.getElementById("student-id").textContent = students[username].id;
+                document.getElementById("student-bonus").textContent = students[username].bonus;
+                document.getElementById("student-minus").textContent = students[username].minus;
+                document.getElementById("student-img").src = students[username].img;
+            } else {
+                document.getElementById("username").classList.add("is-invalid");
+                document.getElementById("password").classList.add("is-invalid");
+                alert("Invalid Username or Password!");
+            }
+        }
+    </script>
 </body>
 </html>
